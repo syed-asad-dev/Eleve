@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 
 export default function Menu2() {
+  const { addItem } = useCart();
+
   const mains = Array(12).fill(null).map((_, i) => ({
-    id: i + 100,
+    id: i + 300,
     name: ['Imperial Wagyu Ribeye', 'Dark Truffle Linguine', 'Golden Saffron Risotto', 'Supreme Salmon Steak'][i % 4] + ` ${i > 3 ? 'Reserve' : ''}`,
     desc: 'Prepared by our Master Chefs with authentic traditional techniques.',
     price: '$' + (45 + (i * 5)),
@@ -43,8 +46,11 @@ export default function Menu2() {
                 </div>
                 <p className="text-gray-400 text-sm mb-6 leading-relaxed">{item.desc}</p>
                 <div className="mt-auto">
-                    <button className="px-6 py-2 border border-white/20 text-light uppercase tracking-wider text-xs font-bold hover:bg-gold hover:text-dark-900 transition-all">
-                    Select
+                    <button
+                      onClick={() => addItem(item)}
+                      className="px-6 py-2 border border-white/20 text-light uppercase tracking-wider text-xs font-bold hover:bg-gold hover:text-dark-900 transition-all cursor-pointer"
+                    >
+                    Add to Order
                     </button>
                 </div>
               </div>

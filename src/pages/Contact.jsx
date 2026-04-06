@@ -15,32 +15,64 @@ const schema = z.object({
 
 export default function Contact() {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm({
     resolver: zodResolver(schema),
   });
 
   const onSubmit = async (data) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    console.log(data);
-    setIsSuccess(true);
-    reset();
-    setTimeout(() => setIsSuccess(false), 5000);
+    setErrorMsg('');
+    try {
+      const res = await fetch('http://localhost:5000/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      if (!res.ok || !result.success) {
+        throw new Error(result.message || 'Failed to send message');
+      }
+      setIsSuccess(true);
+      reset();
+      setTimeout(() => setIsSuccess(false), 5000);
+    } catch (err) {
+      console.error('Message error:', err);
+      setErrorMsg(err.message || 'Something went wrong. Please try again.');
+    }
   };
 
   return (
     <div className="w-full pt-24 bg-dark-900 min-h-screen">
       
-      <div className="relative h-[30vh] flex items-center justify-center">
+      <motion.div 
+        className="relative h-[30vh] flex items-center justify-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         <div className="absolute inset-0">
           <img src="/images/hero_bg_1_1775325452663.png" alt="Contact" className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-dark-900"></div>
         </div>
         <div className="relative z-10 text-center">
-          <h1 className="text-5xl md:text-7xl font-heading text-white mb-4">Contact Us</h1>
-          <p className="text-gold tracking-[0.2em] uppercase text-sm">We'd love to hear from you</p>
+          <motion.h1 
+            initial={{ opacity: 0, x: -40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.3 }}
+            className="text-5xl md:text-7xl font-heading text-white mb-4"
+          >
+            Contact Us
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+            className="text-gold tracking-[0.2em] uppercase text-sm"
+          >
+            We'd love to hear from you
+          </motion.p>
         </div>
-      </div>
+      </motion.div>
 
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         
@@ -53,12 +85,15 @@ export default function Contact() {
           ].map((item, idx) => (
             <motion.div 
               key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              className="p-8 bg-dark-800 border border-white/5 text-center flex flex-col items-center shadow-lg hover:border-gold transition-colors"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, delay: idx * 0.2 }}
+              className="group p-8 bg-dark-800 border border-white/5 text-center flex flex-col items-center shadow-lg cursor-pointer
+                hover:bg-[#2A2200] hover:border-gold hover:-translate-y-1 transition-all duration-[400ms] ease-in-out"
             >
-              <div className="w-16 h-16 rounded-full bg-dark-900 flex items-center justify-center text-gold mb-6">
+              <div className="w-16 h-16 rounded-full bg-dark-900 flex items-center justify-center text-gold mb-6
+                group-hover:scale-[1.15] transition-transform duration-[400ms] ease-in-out">
                 {item.icon}
               </div>
               <h3 className="text-xl font-heading text-white mb-2">{item.title}</h3>
@@ -70,12 +105,23 @@ export default function Contact() {
         {/* Form and Map */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           
-          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}>
+          <motion.div 
+            initial={{ opacity: 0, x: -40 }} 
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.2 }}
+          >
             <h2 className="text-3xl font-heading text-white mb-8">Send a Message</h2>
             
             {isSuccess && (
-              <div className="mb-6 p-4 bg-accent-green/20 border border-accent-green text-accent-green rounded">
-                Message sent successfully! We will get back to you soon.
+              <div className="mb-6 p-4 bg-gold/10 border border-gold/30 text-gold rounded">
+                Message sent successfully! We will get back to you shortly.
+              </div>
+            )}
+
+            {errorMsg && (
+              <div className="mb-6 p-4 bg-red-500/10 border border-red-500/30 text-red-400 rounded">
+                {errorMsg}
               </div>
             )}
 
@@ -110,22 +156,32 @@ export default function Contact() {
               <button 
                 type="submit" 
                 disabled={isSubmitting}
-                className="w-full bg-[#27ae60] hover:bg-[#219653] text-white py-4 font-bold uppercase tracking-widest flex justify-center items-center transition-colors disabled:opacity-50"
+                className="w-full bg-gold text-dark-900 py-4 font-bold uppercase tracking-widest flex justify-center items-center 
+                  hover:bg-white hover:-translate-y-0.5 transition-all duration-[400ms] ease-in-out disabled:opacity-50 cursor-pointer"
               >
                 {isSubmitting ? 'Sending...' : <><Send size={18} className="mr-2" /> Send Message</>}
               </button>
             </form>
           </motion.div>
 
-          {/* Map Embed (Placeholder visual) */}
-          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} className="h-full min-h-[400px] bg-dark-800 border border-white/5 relative flex items-center justify-center p-2">
-             <div className="w-full h-full bg-dark-900 border border-white/5 opacity-50 flex items-center justify-center">
-                 {/* Replaced real google maps with a styled placeholder to match dark theme */}
-                 <div className="text-center">
-                    <MapPin size={48} className="text-gold mx-auto mb-4" />
-                    <p className="text-gray-400 font-heading">Clifton, Karachi</p>
-                 </div>
-             </div>
+          {/* Google Maps Embed */}
+          <motion.div 
+            initial={{ opacity: 0, x: 40 }} 
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="h-full min-h-[400px] rounded-xl overflow-hidden border border-white/10 shadow-2xl"
+          >
+            <iframe
+              src="https://maps.google.com/maps?q=Clifton,Karachi,Pakistan&t=&z=14&ie=UTF8&iwloc=&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0, minHeight: '400px', filter: 'invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.1)' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="ÉLEVÉ Restaurant Location"
+            ></iframe>
           </motion.div>
 
         </div>

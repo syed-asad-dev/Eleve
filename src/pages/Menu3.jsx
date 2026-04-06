@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 
 export default function Menu3() {
+  const { addItem } = useCart();
+
   const desserts = Array(10).fill(null).map((_, i) => ({
-    id: i + 200,
+    id: i + 500,
     name: ['24k Chocolate Dome', 'Matcha Brûlée', 'White Truffle Soufflé', 'Saffron Panna Cotta', 'Berries Pavilion', 'Dark Espresso Tiramisu', 'Vanilla Bean Caviar', 'Gold Leaf Macarons', 'Artisan Sorbet', 'Velvet Lava Cake'][i],
     desc: 'The perfect sweet finish to your ÉLEVÉ experience.',
     price: '$' + (18 + (i * 2)),
@@ -27,7 +30,8 @@ export default function Menu3() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: idx * 0.1 }}
-              className="relative overflow-hidden group rounded-xl border border-transparent hover:border-gold/50 hover:shadow-[0_20px_40px_-15px_rgba(212,175,55,0.4)] transition-all duration-300"
+              className="relative overflow-hidden group rounded-xl border border-transparent hover:border-gold/50 hover:shadow-[0_20px_40px_-15px_rgba(212,175,55,0.4)] transition-all duration-300 cursor-pointer"
+              onClick={() => addItem(item)}
             >
               <div className="h-80 overflow-hidden relative rounded-xl">
                 <img 
@@ -40,7 +44,8 @@ export default function Menu3() {
               <div className="absolute bottom-0 w-full p-6 text-center z-10 text-white">
                 <h3 className="text-2xl font-heading mb-1">{item.name}</h3>
                 <p className="text-gold font-bold mb-3">{item.price}</p>
-                <p className="text-gray-400 text-xs mb-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{item.desc}</p>
+                <p className="text-gray-400 text-xs mb-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">{item.desc}</p>
+                <p className="text-gold/70 text-xs uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to add to order</p>
               </div>
             </motion.div>
           ))}

@@ -32,10 +32,18 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-heading text-white mb-6">Quick Links</h3>
             <ul className="space-y-3">
-              {['Home', 'About Us', 'Our Menu', 'Chef', 'Reservation', 'Contact'].map((item) => (
-                <li key={item}>
-                  <Link to="/" className="text-gray-400 hover:text-gold transition-colors text-sm">
-                    {item}
+              {[
+                { name: 'Home', path: '/' },
+                { name: 'Menu', path: '/menu-1' },
+                { name: 'About', path: '/about' },
+                { name: 'Chef', path: '/chef' },
+                { name: 'Gallery', path: '/gallery' },
+                { name: 'Contact', path: '/contact' },
+                { name: 'Reservation', path: '/reservation' },
+              ].map((item) => (
+                <li key={item.name}>
+                  <Link to={item.path} className="text-gray-400 hover:text-gold transition-colors text-sm">
+                    {item.name}
                   </Link>
                 </li>
               ))}

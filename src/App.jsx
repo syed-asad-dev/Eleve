@@ -1,6 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import CartSidebar from './components/CartSidebar';
+import OrderModal from './components/OrderModal';
 
 // Page Placeholders (to be implemented)
 import Home from './pages/Home';
@@ -19,6 +21,8 @@ function App() {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
+      <CartSidebar />
+      <OrderModal />
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />

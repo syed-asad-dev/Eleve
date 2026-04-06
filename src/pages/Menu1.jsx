@@ -1,12 +1,26 @@
 import { motion } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 
 export default function Menu1() {
+  const { addItem } = useCart();
+
+  const appetizerImages = [
+    'https://images.unsplash.com/photo-1541014741259-de529411b96a?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1544025162-d76694265947?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1626200419199-391ae4be7a41?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1563379926898-05f4575a45d8?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1546039907-7fa05f864c02?w=800&h=600&fit=crop',
+    'https://images.unsplash.com/photo-1559847844-5315695dadae?w=800&h=600&fit=crop'
+  ];
+
   const appetizers = Array(8).fill(null).map((_, i) => ({
     id: i + 1,
     name: ['Truffle Arancini', 'Wagyu Beef Carpaccio', 'Oysters Rockefeller', 'Gold Leaf Scallops'][i % 4] + ` ${i > 3 ? 'II' : ''}`,
     desc: 'Served with signature micro-greens and artisanal foam styling.',
     price: '$' + (25 + (i * 2)),
-    image: `https://loremflickr.com/800/600/food,appetizer,luxury?lock=${i === 3 ? 122 : i === 5 ? 999 : i + 50}`
+    image: appetizerImages[i]
   }));
 
   const mains = Array(8).fill(null).map((_, i) => ({
@@ -32,7 +46,7 @@ export default function Menu1() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: (idx % 3) * 0.1 }}
-      className="group flex flex-col backdrop-blur-md bg-white/10 rounded-xl overflow-hidden border border-gold/20 hover:shadow-xl hover:shadow-gold/20 transition-all duration-300"
+      className="group flex flex-col bg-[#1a1a1a] rounded-xl overflow-hidden border border-gold/20 hover:shadow-xl hover:shadow-gold/20 transition-all duration-300"
     >
       <div className="h-48 overflow-hidden relative">
         <img 
@@ -49,7 +63,10 @@ export default function Menu1() {
           <h3 className="text-xl font-heading text-white mb-2 font-bold transition-colors">{item.name}</h3>
           <p className="text-gray-400 text-sm mb-4 line-clamp-2 font-medium">{item.desc}</p>
         </div>
-        <button className="w-full py-3 border border-white/20 text-light uppercase tracking-wider text-sm font-bold group-hover:bg-gold group-hover:text-dark-900 group-hover:border-gold transition-all">
+        <button
+          onClick={() => addItem(item)}
+          className="w-full py-3 border border-white/20 text-light uppercase tracking-wider text-sm font-bold group-hover:bg-gold group-hover:text-dark-900 group-hover:border-gold transition-all cursor-pointer"
+        >
           Add to Custom Order
         </button>
       </div>

@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ShoppingCart } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useCart } from '../context/CartContext';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { totalItems, setIsOpen: setCartOpen } = useCart();
 
   const links = [
     { name: 'Home', path: '/' },
@@ -16,13 +19,18 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="fixed w-full z-50 glass">
+    <motion.nav 
+      className="fixed w-full z-50 glass"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-28">
           <div className="flex-shrink-0 flex items-center">
             <Link to="/" className="flex items-center">
-              <img src="/eleve2.png" alt="ÉLEVÉ Logo" className="w-auto h-24 object-contain drop-shadow-lg" />
-              <span className="text-4xl font-heading text-white tracking-widest leading-none">ÉLEVÉ</span>
+              <img src="/eleve2.png" alt="ÉLEVÉ Logo" className="w-auto h-40 object-contain drop-shadow-lg" />
+              <span className="text-[32px] font-heading text-white tracking-widest leading-none -ml-4">ÉLEVÉ</span>
             </Link>
           </div>
           
@@ -40,10 +48,37 @@ export default function Navbar() {
                 {link.name}
               </NavLink>
             ))}
-            {/* Reservation combined in main links now, but keeping original CTA structure if user prefers, though they requested Reservation be in sequence. Removed separate Book CTA in desktop since it's in nav sequence */}
+
+            {/* Cart Icon */}
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative text-gold hover:text-white transition-colors duration-300 ml-2"
+              aria-label="Open cart"
+            >
+              <ShoppingCart size={24} />
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 w-5 h-5 bg-gold text-dark-900 text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                  {totalItems}
+                </span>
+              )}
+            </button>
           </div>
 
-          <div className="md:hidden flex items-center">
+          <div className="md:hidden flex items-center space-x-4">
+            {/* Mobile Cart Icon */}
+            <button
+              onClick={() => setCartOpen(true)}
+              className="relative text-gold hover:text-white transition-colors duration-300"
+              aria-label="Open cart"
+            >
+              <ShoppingCart size={24} />
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 w-5 h-5 bg-gold text-dark-900 text-xs font-bold rounded-full flex items-center justify-center leading-none">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-light hover:text-gold focus:outline-none"
@@ -67,10 +102,9 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
-              {/* Kept out Book a table block as it is inside links */}
           </div>
         </div>
       )}
-    </nav>
+    </motion.nav>
   );
 }
