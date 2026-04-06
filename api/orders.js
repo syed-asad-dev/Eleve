@@ -1,7 +1,7 @@
-const connectDB = require('./lib/db');
-const Order = require('./lib/models/Order');
+import connectDB from './lib/db.js';
+import Order from './lib/models/Order.js';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -10,7 +10,6 @@ module.exports = async function handler(req, res) {
   try {
     await connectDB();
   } catch (err) {
-    console.error('DB Connection Error:', err);
     return res.status(500).json({ success: false, message: 'Database connection failed', error: err.message });
   }
 
@@ -34,4 +33,4 @@ module.exports = async function handler(req, res) {
   }
 
   return res.status(405).json({ message: 'Method not allowed' });
-};
+}
