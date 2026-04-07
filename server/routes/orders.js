@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const Order = require('../models/Order');
+import express from 'express';
+import Order from '../models/Order.js';
 
-// POST /api/orders — save new order
+const router = express.Router();
+
 router.post('/', async (req, res) => {
   try {
     const order = new Order(req.body);
@@ -14,7 +14,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /api/orders — get all orders
 router.get('/', async (req, res) => {
   try {
     const orders = await Order.find().sort({ createdAt: -1 });
@@ -24,4 +23,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,8 +1,8 @@
-const express = require('express');
-const router = express.Router();
-const Message = require('../models/Message');
+import express from 'express';
+import Message from '../models/Message.js';
 
-// POST /api/messages — save contact message
+const router = express.Router();
+
 router.post('/', async (req, res) => {
   try {
     const msg = new Message(req.body);
@@ -14,7 +14,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// GET /api/messages — get all messages
 router.get('/', async (req, res) => {
   try {
     const messages = await Message.find().sort({ createdAt: -1 });
@@ -24,4 +23,4 @@ router.get('/', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

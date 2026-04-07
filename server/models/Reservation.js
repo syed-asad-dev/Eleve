@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const ReservationSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
@@ -12,4 +12,4 @@ const ReservationSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Reservation', ReservationSchema);
+export default mongoose.models.Reservation || mongoose.model('Reservation', ReservationSchema);
