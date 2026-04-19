@@ -52,4 +52,6 @@ app.get('/api', (req, res) => {
   res.json({ message: 'ÉLEVÉ API is running perfectly on Vercel' });
 });
 
-export default app;
+export default function handler(req, res) {
+  return app(req, res);
+}
