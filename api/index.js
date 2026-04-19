@@ -3,9 +3,9 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
-import orderRoutes from './routes/orders.js';
-import messageRoutes from './routes/messages.js';
-import reservationRoutes from './routes/reservations.js';
+import orderRoutes from '../backend/routes/orders.js';
+import messageRoutes from '../backend/routes/messages.js';
+import reservationRoutes from '../backend/routes/reservations.js';
 
 dotenv.config();
 
